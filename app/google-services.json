@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "123646297611",
+    "firebase_url": "https://pfe3-23051.firebaseio.com",
+    "project_id": "pfe3-23051",
+    "storage_bucket": "pfe3-23051.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123646297611:android:c259e80b73a1534c69690e",
+        "android_client_info": {
+          "package_name": "com.example.skymail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123646297611-0848s6a6c59v4iue509r7fgn3q7lrq9f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skymail",
+            "certificate_hash": "b5fbaf33e69d2a57722f339cc477c3c83203c85d"
+          }
+        },
+        {
+          "client_id": "123646297611-5lborcvr2c2g8852j9jk913tlrpn7b8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx3WGxEwgJx7mw8FrOstVGfFUXOPIIFKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123646297611-5lborcvr2c2g8852j9jk913tlrpn7b8j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

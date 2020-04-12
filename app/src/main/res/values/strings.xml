@@ -1,0 +1,118 @@
+<resources>
+
+    <!-- InboxMessage activity -->
+    <string name="btn_up_one_level">▲ UP</string>
+    <string name="menu_download_msg">Download ➠ Database</string>
+    <string name="menu_save_message">Save ➠ Device</string>
+    <string name="menu_write_reply">Write a Reply</string>
+    <string name="menu_delete_from_server">Delete From Server</string>
+    <string name="menu_delete_full_message">Delete Full Message (DB)</string>
+    <string name="menu_delete_full_messages">Delete Full Messages</string>
+    <string name="menu_see_full_message">View Full Message</string>
+    <string name="menu_see_full_message_title">Full Message</string>
+    <string name="message_action_done">Done</string>
+    <string name="message_dialog">Received FROM</string>
+    <string name="message_from">FROM</string>
+    <string name="message_to">TO</string>
+    <string name="message_cc">CC</string>
+    <string name="message_bcc">BCC</string>
+    <string name="message_subject">SUBJECT</string>
+    <string name="message_date">DATE</string>
+    <string name="message_contents">MESSAGE</string>
+    <string name="message_contents_loop_no">NO TEXT</string>
+    <string name="message_contents_loop_plain">PLAIN</string>
+    <!-- Login in activity -->
+    <string name="email">email</string>
+
+    <string name="log_in">login</string>
+    <string name="sign_in">signin</string>
+    <string name="mail_app">mailapp</string>
+
+    <!-- Sign in activity -->
+    <string name="todo">todo</string>
+
+    <string name="full_name">Fullname</string>
+    <string name="date_of_birth">dateofbirth</string>
+    <string name="confirm">confirm</string>
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <string name="gender">gender</string>
+
+    <!-- nav_header_activity -->
+    <string name="nav_header_desc">nav_header_desc</string>
+    <string name="nav_header_subtitle">nav_header_subtitle</string>
+
+    <!-- itemsList -->
+    <string name="Inbox">Inbox</string>
+    <string name="Draft">Draft</string>
+    <string name="menu_send">menu_send</string>
+    <string name="menu_share">menu_share</string>
+    <string name="menu_tools">menu_tools</string>
+
+    <string name="open_pgp_message_signature">open_pgp_message_signature</string>
+    <string name="send_encrypt">send_encrypt</string>
+    <string name="Subject">Subject</string>
+    <string name="To">To</string>
+    <string name="Object">Object</string>
+    <string name="title_activity_main5">title_activity_main5</string>
+
+    <string name="app_name">SkyMail</string>
+    <string name="signin">signin</string>
+    <string name="login">login</string>
+    <string name="Email">Email</string>
+    <string name="password">Password</string>
+    <string name="firstname">FirstName</string>
+    <string name="lastname">LastName</string>
+    <string name="PasswordConfirmation">Password Confirmation</string>
+
+    <string name="next">Next</string>
+    <string name="nav_header_title">Android Studio</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="menu_draft">menu_draft</string>
+    <string name="Slideshow">Sildeshox</string>
+    <string name="Tools">Tools</string>
+    <string name="Share" />
+    <string name="BirthDay">BirthDay</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="Gender">Gender</string>
+    <string name="Confirm">Confirm</string>
+    <string name="tools">tool</string>
+    <string name="share">share</string>
+    <string name="send">send</string>
+    <string name="Trash">trash</string>
+    <string name="supprimer_mon_email">Supprimer mon email?</string>
+    <string name="About" />
+    <string name="menu">MENU</string>
+    <string name="about">About</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="confirmer">Confirmer</string>
+    <string name="message_suppression">Tous e-mails et autres contenus associés au compte vont être supprimées.\nVoulez vous vraiment supprimer votre compte ?</string>
+    <string name="supprimer_mon_compte">Supprimer mon compte?</string>
+    <string name="phonenumber">PhoneNumber</string>
+    <string name="to">to</string>
+    <string name="sendaction">sendAction</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="camera_picture">take a picture with your device caméra</string>
+    <string name="image_from_device">Add Image from your device</string>
+
+
+</resources>
