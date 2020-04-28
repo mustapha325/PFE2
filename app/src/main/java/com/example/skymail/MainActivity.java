@@ -16,10 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import com.example.skymail.Data.Users;
-
-import static com.example.skymail.Data.io.access;
+import org.jetbrains.annotations.NotNull;
 import static com.example.skymail.Data.io.store;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Query.addListenerForSingleValueEvent( new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             for(DataSnapshot users: dataSnapshot.getChildren()){
                                 Users user = users.getValue( Users.class );
@@ -71,12 +69,9 @@ public class MainActivity extends AppCompatActivity {
                                 assert user != null;
                                 if (user.getPassword().equals( password.getText().toString())){
                                     Intent login = new Intent(MainActivity.this,MainActivity5.class);
-
-                                    store("email:"+user.getEmail()+";"+"nom:"+user.getFullname()+";"+"id:"+user.getUserID()+";"+"date:"+user.getBirthdate()+";"+"gender:"+user.getGender()+";",MainActivity.this);
+                                    store("email:"+user.getEmail()+";"+"nom:"+user.getFullname()+";"+"id:"+user.getUserID()+";"+"date:"+user.getBirthdate()+";"+"gender:"+user.getGender()+";"+"pass:"+user.getPassword()+";",MainActivity.this);
+                                    login.putExtra( "ID",user.getUserID());
                                     startActivity(login);
-                                    String a = access("email",MainActivity.this);
-                                    Toast.makeText(MainActivity.this,"Email : "+a,Toast.LENGTH_LONG).show();
-
                                 }else{
                                     Toast.makeText( MainActivity.this,"mot pass incorrect",Toast.LENGTH_LONG).show();
                             }

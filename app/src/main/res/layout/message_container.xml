@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Inbox.InboxMessageContainer"
+    android:background="@color/lightwhite"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/InboxMessageContainetToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/greencolor"
+                app:menu="@menu/items"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <TextView
+            android:id="@+id/SubjectHolder"
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:background="@color/lightwhite"
+            android:text="@string/subjectholder"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/whitecolor"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/senderprofilepic"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/senderfullname"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/black"
+                        android:layout_height="30dp"/>
+                    <TextView
+                        android:id="@+id/recieveremail"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        />
+
+
+
+
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textholder"
+                android:layout_width="match_parent"
+                android:background="@color/whitecolor"
+                android:layout_height="wrap_content"
+                />
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+</androidx.core.widget.NestedScrollView>

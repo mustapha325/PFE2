@@ -2,6 +2,7 @@ package com.example.skymail.ui.Inbox;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.skymail.Adapter.InboxAdapter;
 import com.example.skymail.Data.Messages;
-import com.example.skymail.Data.UploadImages;
+import com.example.skymail.Interface.RecyclerItemClick;
 import com.example.skymail.MainActivity5;
 import com.example.skymail.R;
 import com.google.firebase.database.DataSnapshot;
@@ -33,18 +35,16 @@ import static com.example.skymail.Data.io.access;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class InboxFragment extends Fragment {
+public class InboxFragment extends Fragment implements RecyclerItemClick {
 
 
     private RecyclerView rv;
     private String email;
-    private String TheSenderEmail;
     public static Context InboxFragmentContext;
-    private ArrayList<Messages> InboxMessagesListe;
+    public static ArrayList<Messages> InboxMessagesListe;
     private InboxAdapter inboxadapter;
     private RecyclerView.LayoutManager manager;
     private String DeletedMessage;
-    private Uri ImageUri;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_inbox, container, false);
@@ -61,22 +61,23 @@ public class InboxFragment extends Fragment {
         //MANAGER
         manager = new LinearLayoutManager(getContext());
         //ADAPTER
-        inboxadapter = new InboxAdapter( getActivity(),InboxMessagesListe);
-       // retrieve Messages
+        inboxadapter = new InboxAdapter( getActivity(),InboxMessagesListe,this);
+       // retrieve Message
        query.addValueEventListener( new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                for(DataSnapshot m :dataSnapshot.getChildren()){
                    Messages message = m.getValue(Messages.class);
                    InboxMessagesListe.add( message );
-
-
+                   //LAYOUT MANAGER
+                   rv.setLayoutManager(manager);
+                   //setAdapter
+                   rv.setAdapter(inboxadapter);
+                   //animator
+                   rv.setItemAnimator( new DefaultItemAnimator() );
 
                }
-               //LAYOUT MANAGER
-               rv.setLayoutManager(manager);
-               //setAdapter
-               rv.setAdapter(inboxadapter);
+
 
            }
            @SuppressLint("ShowToast")
@@ -87,16 +88,17 @@ public class InboxFragment extends Fragment {
            }
        } );
 
+
+
+
+
+
+
+
+
         ((MainActivity5) Objects.requireNonNull( getActivity() )).enableDisableDrawer( DrawerLayout.LOCK_MODE_UNLOCKED,true);
         // attaching the touch helper to recycler view
-
         //query to get profile picture
-
-
-
-
-
-
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -149,13 +151,20 @@ public class InboxFragment extends Fragment {
 
         return root;
     }
+
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         InboxFragmentContext=context;
     }
 
-
-
-
+    @Override
+    public void OnItemClick(View v, int position) {
+        Intent intent = new Intent( getActivity(),InboxMessageContainer.class );
+        intent.putExtra( "remail",InboxMessagesListe.get( position ).getFrom() );
+        intent.putExtra( "text",InboxMessagesListe.get(position).getMessageText() );
+        intent.putExtra( "subject",InboxMessagesListe.get( position ).getSubject() );
+        intent.putExtra( "picture",InboxMessagesListe.get( position ).getSenderProfilePicture() );
+        startActivity( intent );
+    }
 }

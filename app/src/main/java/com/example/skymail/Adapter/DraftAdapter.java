@@ -1,55 +1,45 @@
 package com.example.skymail.Adapter;
 
-
-
-import android.content.*;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.skymail.Data.Messages;
-import com.example.skymail.Interface.RecyclerItemClick;
 import com.example.skymail.R;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-
-public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.RecyclerVH> {
-
-
+public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.RecyclerVH> {
     private Context c;
     private ArrayList<Messages> Messages;
-    private  RecyclerItemClick recyclerItemClick;
 
-
-    public InboxAdapter(Context c, ArrayList<Messages> Messages,RecyclerItemClick recyclerItemClick) {
+    public DraftAdapter(Context c, ArrayList<Messages> Messages) {
         this.c = c;
         this.Messages = Messages;
-        this.recyclerItemClick = recyclerItemClick;
-
     }
-
     @NonNull
     @Override
     public RecyclerVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RecyclerVH( LayoutInflater.from( c ).inflate( R.layout.list_item, parent, false ),recyclerItemClick );
+        return new DraftAdapter.RecyclerVH( LayoutInflater.from(c).inflate(R.layout.list_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerVH holder, int position) {
-        holder.user.setText( Messages.get( position ).getFrom());
+    public void onBindViewHolder(@NonNull RecyclerVH holder, int position) {
+        holder.user.setText( Messages.get( position ).getTo());
         holder.titel.setText(Messages.get(position).getSubject());
         holder.message.setText(Messages.get( position ).getMessageText());
         Picasso.get().load( Messages.get( position ).getSenderProfilePicture()).fit().into( holder.ProfileIcon );
 
-
-
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -58,30 +48,20 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.RecyclerVH> 
 
 
 
-
-    public  class RecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener
+    static class RecyclerVH extends RecyclerView.ViewHolder
     {
         TextView titel,message,user;
         CircleImageView ProfileIcon;
-        private RecyclerItemClick recyclerItemClick;
 
 
-        public RecyclerVH(View itemView,RecyclerItemClick recyclerItemClick) {
+        RecyclerVH(View itemView) {
             super(itemView);
 
-            titel =  itemView.findViewById(R.id.Title);
+            titel =  itemView.findViewById( R.id.Title);
             message = itemView.findViewById( R.id.Message );
             user = itemView.findViewById( R.id.user );
             ProfileIcon = itemView.findViewById( R.id.profileIcon);
-            this.recyclerItemClick = recyclerItemClick;
-            itemView.setOnClickListener( this );
-        }
-
-        @Override
-        public void onClick(View v) {
-            recyclerItemClick.OnItemClick( v,getAdapterPosition() );
 
         }
     }
-
 }

@@ -1,10 +1,14 @@
 package com.example.skymail;
 
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,14 +16,29 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.skymail.Data.Messages;
+import com.example.skymail.Data.UploadImages;
 import com.example.skymail.Data.Users;
+import com.example.skymail.Data.io;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.Calendar;
+import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity2 extends AppCompatActivity {
@@ -35,6 +54,10 @@ public class MainActivity2 extends AppCompatActivity {
     RadioButton radioButton;
     FirebaseDatabase database;
     DatabaseReference userdatabase;
+    Uri ProfilePicUri;
+    StorageReference storageReference;
+    CircleImageView profilepic;
+
 
 
 
@@ -50,11 +73,11 @@ public class MainActivity2 extends AppCompatActivity {
         date = findViewById( R.id.Date );
         phone = findViewById( R.id.phonenumber);
         confirm = findViewById( R.id.Signin );
+        profilepic = findViewById( R.id.profileIcon );
         radioGroup = findViewById( R.id.radioGroup );
         back = findViewById( R.id.GoBackIcon );
         database = FirebaseDatabase.getInstance();
         userdatabase = database.getReference("users");
-
         date.setOnClickListener( new View.OnClickListener() {
 
             Calendar calendar = Calendar.getInstance();
@@ -94,29 +117,67 @@ public class MainActivity2 extends AppCompatActivity {
         } );
 
     }
+    private String getExtension(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mim = MimeTypeMap.getSingleton();
+        return MimeTypeMap.getFileExtensionFromUrl(cr.getType( uri ));
+    }
 
 
     public void Adduser(){
         int radiobuttinid = radioGroup.getCheckedRadioButtonId();
         radioButton = findViewById( radiobuttinid );
-        String Fullname = fullname.getText().toString().trim();
-        String Email = email.getText().toString().trim();
+        final String Fullname = fullname.getText().toString().trim();
+        final String Email = email.getText().toString().trim();
         String Password = password.getText().toString().trim();
         String Gender = radioButton.getText().toString().trim();
         String Date = date.getText().toString().trim();
         String phonenumber = phone.getText().toString().trim();
-        String ID = userdatabase.push().getKey();
+        final String ID = String.valueOf( System.currentTimeMillis());
+        final Users user = new Users(ID,Fullname,Email,Password,Date,Gender,phonenumber);
+        userdatabase.child( ID ).setValue(user);
+        //add default profile picture with the new user
+        //get image uri from drawable folder
+        ProfilePicUri = (new Uri.Builder())
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(getResources().getResourcePackageName(R.drawable.user))
+                .appendPath(getResources().getResourceTypeName(R.drawable.user))
+                .appendPath(getResources().getResourceEntryName(R.drawable.user))
+                .build();
+        //Storage reference
+        storageReference = FirebaseStorage.getInstance().getReference("DefaultProfilePicture");
+        StorageReference ref = storageReference.child( System.currentTimeMillis()+ "." + getExtension( ProfilePicUri ));
+        ref.putFile( ProfilePicUri ).addOnSuccessListener( new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-        Users user = new Users(ID,Fullname,Email,Password,Date,Gender,phonenumber);
+            }
+        } ).addOnCompleteListener( new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                StorageReference UploadedImageReference = Objects.requireNonNull( Objects.requireNonNull( task.getResult() ).getMetadata() ).getReference();
+                assert UploadedImageReference != null;
+                UploadedImageReference.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // add the DownloadUrl to a String variable
+                        String URL = uri.toString();
+                        //add the image information to the firebase database
+                        UploadImages uploadImages = new UploadImages( ID, Fullname, Email, URL );
+                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference( "ProfilePicture" ).child( ID ).child(ID);
+                        databaseReference1.setValue( uploadImages );
+                    }
+                } );
 
-        assert ID != null;
-        userdatabase.child(ID).setValue(user);
 
+            }
+        });
     }
-
-
-
 }
+
+
+
+
 
 
 

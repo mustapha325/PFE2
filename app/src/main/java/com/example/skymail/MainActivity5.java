@@ -1,21 +1,24 @@
 package com.example.skymail;
-
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import com.example.skymail.Data.UploadImages;
+import com.example.skymail.Data.Users;
+import com.example.skymail.Data.io;
 import com.example.skymail.Interface.DrawerLocker;
+import com.example.skymail.Interface.RecyclerItemClick;
+import com.example.skymail.ui.Inbox.InboxMessageContainer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +38,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -49,7 +51,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;
 import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import static com.example.skymail.Data.io.access;
@@ -66,13 +67,13 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
     private Uri UriImage;
     private Button addImage;
     private static final int PICK_IMAGE_REQUEST=1;
+    private static final int TAKE_PICTURE = 101;
     private StorageReference storageReference;
-    private DatabaseReference databaseReference;
-    private String id,name;
-    private TextView  useremail, userfullname,invisibleURL;
-    public ProgressBar progressBar ;
-    public String ProfilePicID;
+    private String id;
+    private TextView  useremail, userfullname;
     private String fullname;
+    private String userID;
+
 
 
     @SuppressLint("CutPasteId")
@@ -80,15 +81,17 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.fragment_main_reception );
+        Intent intent = getIntent();
         profileimage = findViewById( R.id.profileimage);
         id = access( "id", this );
+        fullname = access( "nom", this );
+        email = access( "email", this );
+        userID = intent.getStringExtra( "ID" );
+
 
         BottomNavigationView bottomNavigationView = findViewById( R.id.bottom_navigation );
         ImageButton settings = findViewById( R.id.settings );
         mDrawerLayout = findViewById( R.id.drawer_layout );
-        progressBar = findViewById( R.id.progressBar);
-        fullname = access( "nom", this );
-        email = access( "email", this );
         Toolbar toolbar = findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
 
@@ -97,6 +100,7 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View view) {
                 Intent Message = new Intent( MainActivity5.this, com.example.skymail.Message.class );
+                Message.putExtra( "ID",userID );
                 startActivity( Message );
             }
         } );
@@ -105,8 +109,15 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
         View headerView = navigationView.getHeaderView( 0 );
          userfullname = headerView.findViewById( R.id.n );
          useremail= headerView.findViewById( R.id.e );
-        userfullname.setText( fullname );
-        useremail.setText( email );
+         userfullname.setText( fullname );
+         useremail.setText( email );
+
+
+
+
+
+
+
 
 
 
@@ -118,38 +129,43 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
                 .setDrawerLayout( drawer )
                 .build();
 
-
-
-
-
         navController = Navigation.findNavController( this, R.id.nav_host_fragment );
         NavigationUI.setupActionBarWithNavController( this, navController, mAppBarConfiguration );
         NavigationUI.setupWithNavController( bottomNavigationView,navController );
         NavigationUI.setupWithNavController( navigationView, navController );
 
         storageReference = FirebaseStorage.getInstance().getReference("ProfilePicture");
-        databaseReference =  FirebaseDatabase.getInstance().getReference("ProfilePicture").child( fullname);
-
-        databaseReference.addListenerForSingleValueEvent( new ValueEventListener() {
-            @SuppressLint("CheckResult")
+        DatabaseReference user = FirebaseDatabase.getInstance().getReference("users");
+        Query query = user.orderByChild( "email" ).equalTo( useremail.getText().toString().trim() );
+        query.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot u : dataSnapshot.getChildren()){
+                     Users user = u.getValue(Users.class);
+                    assert user != null;
+                    DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference("ProfilePicture").child( user.getUserID() );
+                    databaseReference.addValueEventListener( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot pic :dataSnapshot.getChildren()){
+                               UploadImages picture = pic.getValue(UploadImages.class);
+                                assert picture != null;
+                                Picasso.get().load( picture.getmImageUrl() ).into( profileimage );
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                for(DataSnapshot Image : dataSnapshot.getChildren()){
-                    UploadImages uploadImages = Image.getValue( UploadImages.class );
-                    assert uploadImages != null;
-                    Toast.makeText( MainActivity5.this,uploadImages.getmImageUrl(),Toast.LENGTH_LONG ).show();
-                    Picasso.get().load( uploadImages.getmImageUrl() ).into( profileimage );
-
+                        }
+                    } );
+                }
             }
-
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         } );
+
+
 
 
         profileimage.setOnClickListener( new View.OnClickListener() {
@@ -172,7 +188,6 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
                         OpenFileChoser();
                     }
                 } );
-
             }
         } );
 
@@ -187,7 +202,10 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
 
 
 
+
     }
+
+
     private String getExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mim = MimeTypeMap.getSingleton();
@@ -202,63 +220,84 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
        startActivityForResult( intent,PICK_IMAGE_REQUEST);
 
     }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
-
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() !=null){
-            UriImage = data.getData();
-            //Storage reference
-            StorageReference ref = storageReference.child( System.currentTimeMillis()+ "." + getExtension( UriImage ) );
-            // Upload the Profile picture that we picked up to ref
-                ref.putFile(UriImage).addOnProgressListener( new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            Toast.makeText( MainActivity5.this,"Image uploaded",Toast.LENGTH_LONG ).show();
-                            ProfilePicID = databaseReference.push().getKey();
-                            Toast.makeText( MainActivity5.this,name,Toast.LENGTH_LONG ).show();
-
-                        }
-                    }).addOnCompleteListener( new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        //get the uploaded image reference to retrieve her DownloadUrl
-                    StorageReference UploadedImageReference =  Objects.requireNonNull( Objects.requireNonNull( task.getResult() ).getMetadata() ).getReference();
-                        assert UploadedImageReference != null;
-                        UploadedImageReference.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                // add the DownloadUrl to a String variable
-                                String URL = uri.toString();
-                                //add the image information to the firebase database
-                                UploadImages uploadImages = new UploadImages(ProfilePicID,useremail.getText().toString().trim(),URL);
-                                databaseReference.child( ProfilePicID ).setValue(uploadImages);
-                            }
-                        } );
-
-
-
-                    }
-                } )
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            Toast.makeText( MainActivity5.this,"Error",Toast.LENGTH_LONG ).show();
-                        }
-                    });}
-            profileimage.setImageURI(UriImage);
+    private void OpenDeviceCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult( intent,TAKE_PICTURE );
 
     }
 
 
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
+        super.onActivityResult( requestCode, resultCode, data );
+
+        if(resultCode == RESULT_OK && (requestCode == PICK_IMAGE_REQUEST ||requestCode == TAKE_PICTURE )){
+            DatabaseReference user = FirebaseDatabase.getInstance().getReference("users");
+            Query query = user.orderByChild( "email" ).equalTo( useremail.getText().toString().trim() );
+            query.addValueEventListener( new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot u : dataSnapshot.getChildren()){
+                        final Users user = u.getValue(Users.class);
+                        assert user != null;
+
+                        UriImage = data.getData();
+                        //Storage reference
+                        StorageReference ref = storageReference.child( System.currentTimeMillis()+ "." + getExtension( UriImage ) );
+                        // Upload the Profile picture that we picked up to ref
+                        ref.putFile(UriImage).addOnProgressListener( new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                Toast.makeText( MainActivity5.this,"Image uploaded",Toast.LENGTH_LONG ).show();
+
+
+                            }
+                        }).addOnCompleteListener( new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                //get the uploaded image reference to retrieve her DownloadUrl
+                                StorageReference UploadedImageReference =  Objects.requireNonNull( Objects.requireNonNull( task.getResult() ).getMetadata() ).getReference();
+                                assert UploadedImageReference != null;
+                                UploadedImageReference.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        // add the DownloadUrl to a String variable
+                                        String URL = uri.toString();
+                                        //add the image information to the firebase database
+                                        UploadImages uploadImages = new UploadImages(user.getUserID(),user.getFullname(),useremail.getText().toString().trim(),URL);
+                                        DatabaseReference databaseReference1 =FirebaseDatabase.getInstance().getReference("ProfilePicture").child(user.getUserID() ).child( user.getUserID() );
+                                        databaseReference1.setValue(uploadImages);
+                                    }
+                                } );
+
+
+                            }
+                        } )
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        Toast.makeText( MainActivity5.this,"Error",Toast.LENGTH_LONG ).show();
+                                    }
+                                });}
+                    profileimage.setImageURI(UriImage);
+
+                    }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+    }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -320,5 +359,6 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
         //disable action button in toolbar
         Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled(mode2);
     }
+
 
 }

@@ -1,13 +1,13 @@
 package com.example.skymail.Data;
 
 public class Users {
-    String userID;
-    String fullname;
-    String email;
-    String password;
-    String birthdate;
-    String gender;
-    String phonenumber;
+    private String userID;
+    private String fullname;
+    private String email;
+    private String password;
+    private String birthdate;
+    private String gender;
+    private String phonenumber;
 
 
 

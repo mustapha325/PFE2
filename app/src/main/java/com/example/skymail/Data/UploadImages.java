@@ -3,27 +3,40 @@ package com.example.skymail.Data;
 import android.net.Uri;
 
 public class UploadImages {
-    private String ImageID;
     private String userEmail;
     private String mImageUrl;
+    private String userID;
+    private String userFullname;
 
 
 
     public UploadImages() {
     }
 
-    public UploadImages(String imageID,String userEmail, String mImageUrl) {
-        ImageID = imageID;
+    public UploadImages(String userID,String userFullname,String userEmail, String mImageUrl) {
+
         this.userEmail = userEmail;
         this.mImageUrl = mImageUrl;
+        this.userID = userID;
+        this.userFullname=userFullname;
+
+
     }
 
-    public String getImageID() {
-        return ImageID;
+    public String getUserFullname() {
+        return userFullname;
     }
 
-    public void setImageID(String imageID) {
-        ImageID = imageID;
+    public void setUserFullname(String userFullname) {
+        this.userFullname = userFullname;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getUserEmail() {
@@ -41,6 +54,7 @@ public class UploadImages {
     public void setmImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
+
 }
 
 

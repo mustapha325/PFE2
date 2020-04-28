@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 public class io {
     private static final String FILE_NAME = "localdata";
+    private static final String FILE_NAME2 = "localdata2";
 
     public static void store(String txt, Context ctx){
         //String text = load("")+";"+txt;
@@ -40,6 +41,54 @@ public class io {
         String[] multi;
         try {
             FileInputStream fis = ctx.openFileInput(FILE_NAME);
+            Scanner scanner = new Scanner(fis);
+            scanner.useDelimiter("//Z");
+            content = scanner.next();
+            scanner.close();
+            if(content.contains(";")) {
+                multi = content.split(";");
+                while (i < multi.length) {
+                    if (multi[i].startsWith(find + ":")) {
+                        multi = multi[i].split(":");
+                        content = multi[1];
+                        break;
+                    } else i++;
+                }
+                if (i >= multi.length && !(find.equals(""))) content = null;
+            }
+            else {
+                content=null;
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return content;
+    }
+    public static void store2(String txt, Context ctx){
+        //String text = load("")+";"+txt;
+        FileOutputStream fos = null;
+        try {
+            fos = ctx.openFileOutput(FILE_NAME2, Context.MODE_PRIVATE );
+            fos.write( txt.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static String access2 (String find,Context ctx){
+        String content = null;
+        int i = 0;
+        String[] multi;
+        try {
+            FileInputStream fis = ctx.openFileInput(FILE_NAME2);
             Scanner scanner = new Scanner(fis);
             scanner.useDelimiter("//Z");
             content = scanner.next();

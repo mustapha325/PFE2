@@ -3,14 +3,14 @@ package com.example.skymail.Data;
 
 
 public class Messages {
-    String userID;
-    String messagID;
-    String From;
-    String To;
-    String Subject;
-    String Object;
-    String MessageText;
-    String SenderProfilePicture;
+    private String userID;
+    private String messagID;
+    private String From;
+    private String To;
+    private String Subject;
+    private String Object;
+    private String MessageText;
+    private String SenderProfilePicture;
 
     public Messages() {
     }

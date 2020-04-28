@@ -6,7 +6,6 @@
         android:icon="@drawable/sent48"
         android:title="@string/sendaction"
         app:showAsAction="ifRoom"
-
         />
 
 </menu>

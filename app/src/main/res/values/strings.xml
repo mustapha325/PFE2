@@ -113,6 +113,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="camera_picture">take a picture with your device caméra</string>
     <string name="image_from_device">Add Image from your device</string>
+    <string name="reciever_email">Reciever Email</string>
+    <string name="subject">Subject</string>
+    <string name="object">Object</string>
+    <string name="text">Text</string>
+    <string name="subjectholder">SubjectHolder</string>
+    <string name="id">id</string>
 
 
 </resources>

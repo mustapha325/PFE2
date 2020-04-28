@@ -12,21 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
+        android:clickable="false"
+        android:focusable="false"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileIcon"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
+            app:civ_border_width="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="10dp"
             android:orientation="vertical"
 
             >
