@@ -63,6 +63,7 @@ public class Message extends AppCompatActivity {
         from.setText( email );
 
 
+
         to.setText( EmailFromContactInformation );
 
 
