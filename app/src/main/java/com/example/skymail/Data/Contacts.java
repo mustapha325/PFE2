@@ -1,19 +1,39 @@
 package com.example.skymail.Data;
 
 public class Contacts {
-    private String userID;
+    private String contacterID;
     private String UserFullname;
     private String UserEmail;
     private String UserProfilePicURI;
+    private String UserPhonenumber;
+    String userID;
 
     public Contacts() {
     }
 
-    public Contacts(String userID, String userFullname, String userEmail, String userProfilePicURI) {
-        this.userID = userID;
+    public Contacts(String contacterID, String userFullname, String userEmail, String userProfilePicURI,String userID,String UserPhonenumber) {
+        this.contacterID = contacterID;
         UserFullname = userFullname;
         UserEmail = userEmail;
         UserProfilePicURI = userProfilePicURI;
+        this.UserPhonenumber = UserPhonenumber;
+        this.userID = userID;
+    }
+
+    public String getUserPhonenumber() {
+        return UserPhonenumber;
+    }
+
+    public void setUserPhonenumber(String userPhonenumber) {
+        UserPhonenumber = userPhonenumber;
+    }
+
+    public String getContacterID() {
+        return contacterID;
+    }
+
+    public void setContacterID(String contacterID) {
+        this.contacterID = contacterID;
     }
 
     public String getUserID() {

@@ -1,17 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/search"
     android:layout_height="match_parent"
+    android:background="@color/black"
     >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:orientation="horizontal"
+        >
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:id="@+id/ToContactList"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/contacts"
+                android:textColor="@color/whitecolor"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                >
+
+            </TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right"
+                />
+
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/addcontact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/signs"
+            android:background="@drawable/circlarimagebutton"
+            android:translationX="220dp"
+            android:translationY="20dp"
+            android:elevation="5dp"
+            android:focusable="false"
+            android:clickable="false"
+            />
 
 
 
 
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contactRV"
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationY="30dp"
+        android:orientation="horizontal"
+         />
+
+
+
+</LinearLayout>

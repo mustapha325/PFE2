@@ -25,7 +25,7 @@ public class InboxMessageContainer extends AppCompatActivity {
 
     private TextView subject,text,remail,name;
     private CircleImageView circleImageView;
-    String email,picture,sub,messagetext;
+    String email,picture,sub,messagetext,fullname;
     private Toolbar toolbar;
 
 
@@ -43,6 +43,7 @@ public class InboxMessageContainer extends AppCompatActivity {
         picture = intent.getStringExtra( "picture" );
         sub = intent.getStringExtra( "subject" );
         messagetext = intent.getStringExtra( "text" );
+        fullname = intent.getStringExtra( "FULLNAME" );
 
 
         subject = findViewById( R.id.SubjectHolder );
@@ -55,54 +56,12 @@ public class InboxMessageContainer extends AppCompatActivity {
         text.setText( messagetext );
         Picasso.get().load( picture ).into( circleImageView );
         remail.setText( email );
-        getSenderFullName();
+        name.setText( fullname );
 
 
 
 
 
-    }
-
-
-    public void getSenderFullName(){
-        DatabaseReference databaseReference;
-        databaseReference = FirebaseDatabase.getInstance().getReference("SendedMessages");
-        final Query query = databaseReference.orderByChild( "from" ).equalTo( email );
-
-        databaseReference.addValueEventListener( new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot m : dataSnapshot.getChildren()){
-                    Messages messages = m.getValue( Messages.class);
-                    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-                    assert messages != null;
-                    Query query1 = databaseReference.orderByChild( "email" ).equalTo( messages.getTo() );
-                    query1.addValueEventListener( new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot u : dataSnapshot.getChildren()){
-                                Users users = u.getValue(Users.class);
-                                assert users != null;
-                                name.setText( users.getFullname() );
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    } );
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        } );
 
     }
-
-
 }

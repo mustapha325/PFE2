@@ -41,7 +41,8 @@
             android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
             app:elevation="20dp"
-            app:menu="@menu/bottom_navigation_menu" />
+            app:menu="@menu/bottom_navigation_menu"
+            />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

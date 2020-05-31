@@ -11,19 +11,30 @@ public class Messages {
     private String Object;
     private String MessageText;
     private String SenderProfilePicture;
+    private String SenderFullName;
 
     public Messages() {
     }
 
-    public Messages(String userID, String messagID, String from, String to, String subject, String object, String messageText, String senderProfilePicture) {
+    public Messages(String userID, String messagID, String from, String to, String subject, String object, String messageText, String senderProfilePicture, String SenderFullName) {
         this.userID = userID;
         this.messagID = messagID;
+        this.SenderFullName = SenderFullName;
         From = from;
         To = to;
         Subject = subject;
         Object = object;
         MessageText = messageText;
         SenderProfilePicture = senderProfilePicture;
+
+    }
+
+    public String getSenderFullName() {
+        return SenderFullName;
+    }
+
+    public void setSenderFullName(String senderFullName) {
+        SenderFullName = senderFullName;
     }
 
     public String getUserID() {

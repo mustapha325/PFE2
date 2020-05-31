@@ -10,10 +10,9 @@
 
   <androidx.recyclerview.widget.RecyclerView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
       android:orientation="vertical"
       android:id="@+id/inboxRV"
-       />
+      android:layout_height="match_parent" />
 
 
 </LinearLayout>

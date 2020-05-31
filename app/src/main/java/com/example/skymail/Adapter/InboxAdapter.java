@@ -36,12 +36,12 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.RecyclerVH> 
     @NonNull
     @Override
     public RecyclerVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RecyclerVH( LayoutInflater.from( c ).inflate( R.layout.list_item, parent, false ),recyclerItemClick );
+        return new RecyclerVH( LayoutInflater.from( c ).inflate( R.layout.list_item, parent, false ), recyclerItemClick );
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerVH holder, int position) {
-        holder.user.setText( Messages.get( position ).getFrom());
+    public void onBindViewHolder(RecyclerVH holder, int position) {
+        holder.user.setText( Messages.get( position ).getSenderFullName());
         holder.titel.setText(Messages.get(position).getSubject());
         holder.message.setText(Messages.get( position ).getMessageText());
         Picasso.get().load( Messages.get( position ).getSenderProfilePicture()).fit().into( holder.ProfileIcon );
@@ -59,14 +59,14 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.RecyclerVH> 
 
 
 
-    public  class RecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener
+    public static class RecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView titel,message,user;
         CircleImageView ProfileIcon;
         private RecyclerItemClick recyclerItemClick;
 
 
-        public RecyclerVH(View itemView,RecyclerItemClick recyclerItemClick) {
+         RecyclerVH(View itemView,RecyclerItemClick recyclerItemClick) {
             super(itemView);
 
             titel =  itemView.findViewById(R.id.Title);

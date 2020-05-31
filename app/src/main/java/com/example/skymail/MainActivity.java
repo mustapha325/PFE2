@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent login = new Intent(MainActivity.this,MainActivity5.class);
                                     store("email:"+user.getEmail()+";"+"nom:"+user.getFullname()+";"+"id:"+user.getUserID()+";"+"date:"+user.getBirthdate()+";"+"gender:"+user.getGender()+";"+"pass:"+user.getPassword()+";",MainActivity.this);
                                     login.putExtra( "ID",user.getUserID());
+                                    login.putExtra( "number",user.getPhonenumber());
                                     startActivity(login);
                                 }else{
                                     Toast.makeText( MainActivity.this,"mot pass incorrect",Toast.LENGTH_LONG).show();

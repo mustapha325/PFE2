@@ -40,8 +40,8 @@ public class InboxFragment extends Fragment implements RecyclerItemClick {
 
     private RecyclerView rv;
     private String email;
-    public static Context InboxFragmentContext;
-    public static ArrayList<Messages> InboxMessagesListe;
+    private Context InboxFragmentContext;
+    private ArrayList<Messages> InboxMessagesListe;
     private InboxAdapter inboxadapter;
     private RecyclerView.LayoutManager manager;
     private String DeletedMessage;
@@ -161,10 +161,11 @@ public class InboxFragment extends Fragment implements RecyclerItemClick {
     @Override
     public void OnItemClick(View v, int position) {
         Intent intent = new Intent( getActivity(),InboxMessageContainer.class );
-        intent.putExtra( "remail",InboxMessagesListe.get( position ).getFrom() );
+        intent.putExtra( "remail",InboxMessagesListe.get( position ).getTo() );
         intent.putExtra( "text",InboxMessagesListe.get(position).getMessageText() );
         intent.putExtra( "subject",InboxMessagesListe.get( position ).getSubject() );
         intent.putExtra( "picture",InboxMessagesListe.get( position ).getSenderProfilePicture() );
+        intent.putExtra( "FULLNAME",InboxMessagesListe.get( position ).getSenderFullName() );
         startActivity( intent );
     }
 }

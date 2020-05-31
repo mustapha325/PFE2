@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,7 +35,10 @@ public class Message extends AppCompatActivity {
     FirebaseDatabase messagedatabase;
     Toolbar toolbar;
     DatabaseReference DraftRreference;
-    private static String userID;
+    public static String userID;
+    private static String userFULLNAME;
+    private static String recieverphonenumber;
+    private String EmailFromContactInformation;
 
 
     @Override
@@ -44,6 +48,10 @@ public class Message extends AppCompatActivity {
         Intent intent = getIntent();
         from = findViewById( R.id.From );
         userID = intent.getStringExtra("ID");
+        userFULLNAME = intent.getStringExtra( "FULLNAME" );
+        recieverphonenumber = intent.getStringExtra("number");
+        EmailFromContactInformation = intent.getStringExtra( "email" );
+
         to = findViewById( R.id.To );
         object1 = findViewById( R.id.Object1 );
         subject = findViewById( R.id.Subject );
@@ -53,6 +61,9 @@ public class Message extends AppCompatActivity {
         email = access( "email", Message.this );
         ID = access( "id", Message.this );
         from.setText( email );
+
+
+        to.setText( EmailFromContactInformation );
 
 
         setSupportActionBar( toolbar );
@@ -127,6 +138,7 @@ public class Message extends AppCompatActivity {
             String Object = object1.getText().toString().trim();
             String Subject = subject.getText().toString().trim();
             String Message = message.getText().toString().trim();
+            String userFullname = userFULLNAME;
             String ProfilePictureUri;
 
             @Override
@@ -137,7 +149,7 @@ public class Message extends AppCompatActivity {
                     ProfilePictureUri = ProfilePic.getmImageUrl();
                 }
 
-                Messages message = new Messages( userID, messageID, From, To, Subject, Object, Message, ProfilePictureUri );
+                Messages message = new Messages( userID, messageID, From, To, Subject, Object, Message, ProfilePictureUri,userFullname );
                 assert messageID != null;
                 DraftRreference.child( messageID ).setValue( message );
             }
@@ -174,7 +186,7 @@ public class Message extends AppCompatActivity {
                     UploadImages ProfilePic = image.getValue(UploadImages.class);
                     assert ProfilePic != null;
                     ProfilePictureUri = ProfilePic.getmImageUrl();
-                    Messages message = new Messages(userID,messageID,From,To,Subject,Object,Messagetext,ProfilePictureUri);
+                    Messages message = new Messages(userID,messageID,From,To,Subject,Object,Messagetext,ProfilePictureUri,userFULLNAME);
                     assert messageID != null;
                     root.child(messageID).setValue(message);
                     root2.child( messageID ).setValue( message );
@@ -221,10 +233,12 @@ public class Message extends AppCompatActivity {
                                         for (DataSnapshot u : dataSnapshot.getChildren()) {
                                             Users user = u.getValue( Users.class );
                                             assert user != null;
+                                            DatabaseReference Contacts = FirebaseDatabase.getInstance().getReference("Contacts").child(userID).child( "contacts" );
+                                            Contacts contact = new Contacts(image.getUserID(),image.getUserFullname(),image.getUserEmail(),image.getmImageUrl(),userID,user.getPhonenumber());
+                                            Contacts.child( image.getUserID() ).setValue( contact );
                                         }
-                                        DatabaseReference Contacts = FirebaseDatabase.getInstance().getReference("Contacts").child(userID);
-                                        Contacts contact = new Contacts(image.getUserID(),image.getUserFullname(),image.getUserEmail(),image.getmImageUrl());
-                                        Contacts.child( image.getUserID() ).setValue( contact );
+
+
 
                                     }
 

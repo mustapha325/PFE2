@@ -72,7 +72,8 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
     private String id;
     private TextView  useremail, userfullname;
     private String fullname;
-    private String userID;
+    static String userID;
+    static String phonenumber;
 
 
 
@@ -87,6 +88,7 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
         fullname = access( "nom", this );
         email = access( "email", this );
         userID = intent.getStringExtra( "ID" );
+        phonenumber = intent.getStringExtra( "number" );
 
 
         BottomNavigationView bottomNavigationView = findViewById( R.id.bottom_navigation );
@@ -101,6 +103,8 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
             public void onClick(View view) {
                 Intent Message = new Intent( MainActivity5.this, com.example.skymail.Message.class );
                 Message.putExtra( "ID",userID );
+                Message.putExtra( "FULLNAME",fullname );
+                Message.putExtra( "number",phonenumber );
                 startActivity( Message );
             }
         } );
@@ -332,6 +336,14 @@ public class MainActivity5 extends AppCompatActivity implements NavigationView.O
             case nav_menu_id:
                 mDrawerLayout.openDrawer( Gravity.LEFT );
                 break;
+
+
+            case R.id.nav_search:
+                Bundle bundle = new Bundle();
+                bundle.putString( "ID",userID);
+                research research = new research();
+                research.setArguments( bundle );
+
         }
 
 
